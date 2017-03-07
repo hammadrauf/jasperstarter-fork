@@ -9,3 +9,16 @@ pipelines:
           - ssh-keyscan -t rsa ${SF_HOST} >>  ~/.ssh/known_hosts
           - (umask 077; echo $SF_SSH_BASE64 | base64 --decode > ~/.ssh/id_rsa)
           - scp target/*.zip ${SF_USER}@${SF_HOST}:${SF_FILEBASE}/snapshots/
+  branches:
+    pipelinetest:
+      - step:
+        image: cenote/jasperstarter-env
+        -script:
+          - mvn -version
+          - mvn -B verify
+          - mvn clean package -P snapshot
+          # upload to bitbucket
+          - ARTIFACT=$(ls -1 target/*.zip|head -n1)
+          - ARTIFACT_BASENAME=$(basename $ARTIFACT)
+          - curl -X POST -v --user "${BB_AUTH_STRING}" "https://api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"${ARTIFACT}"
+          #- curl -X POST -v "https://${BB_AUTH_STRING}@api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"${ARTIFACT}"

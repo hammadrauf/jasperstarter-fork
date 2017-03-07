@@ -12,7 +12,7 @@ pipelines:
   branches:
     pipelinetest:
       - step:
-        image: cenote/jasperstarter-env
+        #image: cenote/jasperstarter-env
         script:
           - mvn -version
           - mvn -B verify

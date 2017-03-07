@@ -13,7 +13,7 @@ pipelines:
     pipelinetest:
       - step:
         image: cenote/jasperstarter-env
-        -script:
+        script:
           - mvn -version
           - mvn -B verify
           - mvn clean package -P snapshot

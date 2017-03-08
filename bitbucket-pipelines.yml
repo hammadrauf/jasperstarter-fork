@@ -15,10 +15,16 @@ pipelines:
           image: cenote/jasperstarter-env
           script:
             - mvn -version
-            - mvn -B verify
             - mvn clean package -P snapshot
             # upload to bitbucket
             - ARTIFACT=$(ls -1 target/*.zip|head -n1)
             - ARTIFACT_BASENAME=$(basename $ARTIFACT)
             - curl -X POST -v --user "${BB_AUTH_STRING}" "https://api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"${ARTIFACT}"
             #- curl -X POST -v "https://${BB_AUTH_STRING}@api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"${ARTIFACT}"
+            # test from Bitbucket support
+            - echo Hello World > hello2.txt
+            - cat hello2.txt
+            - echo "AUTH:" ${BB_AUTH_STRING}
+            - echo "OWN:"  ${BITBUCKET_REPO_OWNER}
+            - echo "SLUG:" ${BITBUCKET_REPO_SLUG}
+            - curl -v -X POST "https://${BB_AUTH_STRING}@api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@hello2.txt

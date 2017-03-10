@@ -11,7 +11,7 @@ pipelines:
           - scp target/*.zip ${SF_USER}@${SF_HOST}:${SF_FILEBASE}/snapshots/
 
   tags:
-    '*-*':
+    JasperStarter-*:
       - step:
           script:
             - mvn clean package -P release,windows-setup

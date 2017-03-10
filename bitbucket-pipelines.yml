@@ -28,7 +28,6 @@ pipelines:
             # uploading...
             - scp *.zip ${SF_USER}@${SF_HOST}:${SF_FILEBASE}/snapshots/$RELEASE_DIR
 
-
   branches:
     pipelinetest:
       - step:

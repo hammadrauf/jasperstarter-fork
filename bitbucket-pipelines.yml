@@ -22,7 +22,7 @@ pipelines:
             # #[[ "${BITBUCKET_TAG}" =~ .*-([0-9]+.[0-9]+) ]]
             # #RELEASE_DIR=${BASH_REMATCH[0]}
             - RELEASE_DIR=test
-            #- RELEASE_DIR=$(expr "${BITBUCKET_TAG}" : '\(.*-[0-9]*.[0-9]*\)')
+            - RELEASE_DIR=$(expr "${BITBUCKET_TAG}" : "\(.*-[0-9]*.[0-9]*\)")
             - echo $RELEASE_DIR
             - cd target && mkdir $RELEASE_DIR
             - scp -r $RELEASE_DIR ${SF_USER}@${SF_HOST}:${SF_FILEBASE}/snapshots/

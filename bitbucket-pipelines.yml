@@ -9,6 +9,7 @@ pipelines:
           - ssh-keyscan -t rsa ${SF_HOST} >>  ~/.ssh/known_hosts
           - (umask 077; echo $SF_SSH_BASE64 | base64 --decode > ~/.ssh/id_rsa)
           - scp target/*.zip ${SF_USER}@${SF_HOST}:${SF_FILEBASE}/snapshots/
+
   tags:
     '*-*':
       - step:
@@ -26,6 +27,8 @@ pipelines:
             - scp -r $RELEASE_DIR ${SF_USER}@${SF_HOST}:${SF_FILEBASE}/snapshots/
             # uploading...
             - scp *.zip ${SF_USER}@${SF_HOST}:${SF_FILEBASE}/snapshots/$RELEASE_DIR
+
+
   branches:
     pipelinetest:
       - step:

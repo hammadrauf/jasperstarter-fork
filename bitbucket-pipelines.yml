@@ -48,7 +48,7 @@ pipelines:
     java7*:
       - step:
           name: Java7 Maven build (Java7 image not yet available)
-          #image: cenote/java7-not-yet-available
+          image: maven:3.6-jdk-7
           caches:
             - maven
           script:

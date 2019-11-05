@@ -18,11 +18,15 @@ package de.cenote.tools.classpath;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Arrays;
+
+import javax.print.attribute.standard.MediaSize.Other;
 
 /**
  * <p>ApplicationClasspath class.</p>
@@ -259,5 +263,18 @@ public class ApplicationClasspath {
             baseDir = baseDir.getParentFile();
         }
         return baseDir;
+    }
+
+	public static void replaceSystemClassLoader() throws NoSuchFieldException, IllegalAccessException {
+		// Lambda Version
+		/*
+		Field systemClassLoader = Arrays.stream(ClassLoader.class
+		        .getDeclaredFields()).filter(f -> f.getType() == ClassLoader.class && !f.getName().equals("parent"))
+                .findFirst().orElse(null);
+                */
+		Field systemClassLoader = ClassLoader.class.getDeclaredField("scl");
+        systemClassLoader.setAccessible(true);
+        systemClassLoader.set(null, new URLClassLoader(new URL[0]));
+        Thread.currentThread().setContextClassLoader(new URLClassLoader(new URL[0], ClassLoader.getSystemClassLoader()));
     }
 }

@@ -166,6 +166,12 @@ public class App {
 
     private void processReport(Config config)
             throws IllegalArgumentException, InterruptedException, JRException {
+		try {
+			ApplicationClasspath.replaceSystemClassLoader();
+		} catch (NoSuchFieldException | IllegalAccessException ex) {
+			errSink.println(ex.getMessage());
+			System.exit(1);
+		}
         // add the jdbc dir to classpath
         try {
             if (config.hasJdbcDir()) {
